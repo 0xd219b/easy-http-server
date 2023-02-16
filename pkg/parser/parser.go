@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"io/ioutil"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
@@ -10,11 +10,12 @@ type Parser struct {
 	URL    string `yaml:"url"`
 	Method string `yaml:"method"`
 	Resp   string `yaml:"resp"`
+	Status int    `yaml:"status"`
 }
 
-func ParserFromYaml(yamlFile string) ([]Parser, error) {
+func FromYaml(yamlFile string) ([]Parser, error) {
 	var parsers []Parser
-	yamlFileBytes, err := ioutil.ReadFile(yamlFile)
+	yamlFileBytes, err := os.ReadFile(yamlFile)
 	if err != nil {
 		return nil, err
 	}
@@ -43,6 +44,10 @@ func (p Parser) GetMethodType() string {
 	return p.Method
 }
 
-func (p Parser) GetResp() string {
-	return p.Resp
+func (p Parser) GetResp() []byte {
+	return []byte(p.Resp)
+}
+
+func (p Parser) GetStatus() int {
+	return p.Status
 }

@@ -18,8 +18,7 @@ func Test_getParsersFromRawBytes(t *testing.T) {
 		{
 			name: "test getParsersFromRawBytes",
 			args: args{
-				rawBytes: []byte(`
-- url: /test
+				rawBytes: []byte(`- url: /test
   method: GET
   resp: "{\"name\":\"test\"}"
 - url: /test
@@ -31,12 +30,12 @@ func Test_getParsersFromRawBytes(t *testing.T) {
 				{
 					URL:    "/test",
 					Method: "GET",
-					Resp:   `{"name":"test"}`,
+					Resp:   "{\"name\":\"test\"}",
 				},
 				{
 					URL:    "/test",
 					Method: "POST",
-					Resp:   `{"name":"test"}`,
+					Resp:   "{\"name\":\"test\"}",
 				},
 			},
 			wantErr: false,

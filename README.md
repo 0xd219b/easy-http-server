@@ -16,3 +16,27 @@ easy-http-server -p [server_port] single -u [url_path] -m [request_method]
 ```
 ./easy-http-server -p 9080 single -u info -m POST
 ```
+
+### Mock模式
+
+./easy-http-server mock -y [yaml_file_path]
+
+`yaml_file_path`: yaml文件的路径
+
+```yaml
+# yaml文件
+- url: /test
+  method: POST
+  resp: "{\"test\":\"created\"}"
+- url: /test/file
+  method: GET
+  resp: "{\"test\":\"ok\"}"
+```
+
+## features
+- [x] 支持单一模式
+- [x] 支持mock模式
+- [x] 支持yaml文件配置
+- [ ] 支持多种请求类型（目前仅支持POST、GET）
+- [ ] 支持多种响应类型（目前仅支持json）
+- [ ] 支持响应Header

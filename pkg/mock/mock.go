@@ -2,27 +2,27 @@ package mock
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func GenHandler(url, method string, resp string) gin.HandlerFunc {
+func GenHandler(method string, resp []byte, status int) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if method == "GET" {
-			var f interface{}
-			err := json.Unmarshal([]byte(resp), &f)
-			if err != nil {
-				panic(err)
+		if status == 0 {
+			switch method {
+			case "GET":
+				status = http.StatusOK
+			case "POST":
+				status = http.StatusCreated
+			default:
+				status = http.StatusOK
 			}
-			c.JSON(http.StatusOK, f)
-		} else if method == "POST" {
-			var f interface{}
-			err := json.Unmarshal([]byte(resp), &f)
-			if err != nil {
-				panic(err)
-			}
-			c.JSON(http.StatusCreated, f)
 		}
+		var f interface{}
+		err := json.Unmarshal(resp, &f)
+		if err != nil {
+			panic(err)
+		}
+		c.JSON(status, f)
 	}
 }

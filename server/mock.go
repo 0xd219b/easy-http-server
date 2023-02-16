@@ -11,7 +11,7 @@ import (
 
 func RunMockServer() {
 	if config.Cfg.GetMockService() == "server" {
-		fmt.Println(config.Cfg.GetMockService())
+		fmt.Println("🎭 Start Mock Server")
 		runAsServer()
 	} else {
 		fmt.Println(config.Cfg.GetMockService())
@@ -23,15 +23,16 @@ func runAsServer() {
 	// run server by gin
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	parsers, err := parser.ParserFromYaml(config.Cfg.GetMockfilePath())
+	parsers, err := parser.FromYaml(config.Cfg.GetMockfilePath())
 	if err != nil {
 		panic(err)
 	}
 	// init all request handlers from parsers
-	for _, parser := range parsers {
-		router.Handle(parser.GetMethodType(), parser.GetURL(),
-			mock.GenHandler(parser.GetURL(), parser.GetMethodType(), parser.GetResp()))
+	for _, p := range parsers {
+		router.Handle(p.GetMethodType(), p.GetURL(),
+			mock.GenHandler(p.GetMethodType(), p.GetResp(), p.GetStatus()))
 	}
+	fmt.Printf("🍺 MockServer is running on port :%d\n", config.Cfg.GetServerPort())
 	err = router.Run(fmt.Sprintf(":%d", config.Cfg.GetServerPort()))
 	if err != nil {
 		panic(err)
